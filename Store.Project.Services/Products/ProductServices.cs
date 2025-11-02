@@ -19,6 +19,7 @@ namespace Store.Project.Services.Products
             var result = _mapper.Map<IEnumerable<ProductResponse>>(products);
             return result;
         }
+
         public async Task<ProductResponse> GetProductByIdAsync(int id)
         {
             var product = await _unitOfWork.GetRepository<int, Product>().GetAsync(id);
@@ -26,6 +27,7 @@ namespace Store.Project.Services.Products
             return result;
 
         }
+
         public async Task<IEnumerable<BrandTypeResponse>> GetAllBrandsAsync()
         {
             var brands = await _unitOfWork.GetRepository<int, ProductBrand>().GetAllAsync();

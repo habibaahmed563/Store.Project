@@ -21,6 +21,7 @@ namespace Store.Project.Presentation
             if (result is null) return BadRequest();
             return Ok(result);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(int? id)
         {
@@ -29,6 +30,7 @@ namespace Store.Project.Presentation
             if (result is null) return NotFound();
             return Ok(result);
         }
+
         [HttpGet("brands")]
         public async Task<IActionResult> GetAllBrands()
         {
@@ -36,6 +38,7 @@ namespace Store.Project.Presentation
             if (result is null) return BadRequest();
             return Ok(result);
         }
+
         [HttpGet("types")]
         public async Task<IActionResult> GetAllTypes()
         {
