@@ -38,7 +38,7 @@ namespace Store.Project.Presentation
             if (result is null) return BadRequest();
             return Ok(result);
         }
-
+ 
         [HttpGet("types")]
         public async Task<IActionResult> GetAllTypes()
         {
