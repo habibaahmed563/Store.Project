@@ -22,14 +22,19 @@ namespace Store.Project.Persistence.Repositories
                 : await _context.Products.Include(P => P.Brand).Include(P => P.Type).AsNoTracking().ToListAsync() as IEnumerable<TEntity>;
 
             }
-
             return changeTraker ?
                 await _context.Set<TEntity>().ToListAsync()
                 : await _context.Set<TEntity>().AsNoTracking().ToListAsync();
         }
+
         public async Task<TEntity?> GetAsync(TKey key)
         {
-            return await _context.Products.Include(P => P.Brand).Include(P => P.Type).FirstOrDefaultAsync(P => P.Id == key as int?) as TEntity;
+            if (typeof(TEntity) == typeof(Product))
+            {
+                //return await _context.Products.Include(P => P.Brand).Include(P => P.Type).FirstOrDefaultAsync(P => P.Id == key as int?) as TEntity;
+                return await _context.Products.Include(P => P.Brand).Include(P => P.Type).Where(P => P.Id == key as int?).FirstOrDefaultAsync() as TEntity;
+            }
+            return await _context.Set<TEntity>().FindAsync(key);
         }
         public async Task AddAsync(TEntity entity)
         {
