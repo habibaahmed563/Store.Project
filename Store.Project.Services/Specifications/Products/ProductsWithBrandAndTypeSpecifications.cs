@@ -23,7 +23,8 @@ namespace Store.Project.Services.Specifications.Products
                 (!parameters.TypeId.HasValue  || P.TypeId == parameters.TypeId)
                 &&
                  (string.IsNullOrEmpty(parameters.Search) ||P.Name.ToLower().Contains(parameters.Search.ToLower()))
-            )
+            
+                 )
         {
 
                 ApplyPagination(parameters.PageSize, parameters.PageIndex);
