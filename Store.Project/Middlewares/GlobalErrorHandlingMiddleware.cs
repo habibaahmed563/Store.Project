@@ -22,7 +22,11 @@ namespace Store.Project.Web.Middlewares
                 // Logic
 
                 // 1. Set status code of Response
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                context.Response.StatusCode = ex switch
+                {
+                    DllNotFoundException => StatusCodes.Status400BadRequest,
+                    _ => StatusCodes.Status500InternalServerError
+                };
 
                 // 2. Set Content Type of Response
                 context.Response.ContentType = "application/json";

@@ -28,7 +28,7 @@ namespace Store.Project.Presentation
         {
             if (id == null) return BadRequest();
             var result = await _serviceManager.productService.GetProductByIdAsync(id.Value);
-            if (result is null) return NotFound();
+            
             return Ok(result);
         }
 
