@@ -6,6 +6,7 @@ using Store.Project.Persistence.Data.Contexts;
 using Store.Project.Services;
 using Store.Project.Services.Abstractions;
 using Store.Project.Services.Mapping.Products;
+using Store.Project.Web.Middlewares;
 
 namespace Store.Project
 {
@@ -39,6 +40,10 @@ namespace Store.Project
             using var scope = app.Services.CreateScope();
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
             await dbInitializer.InitializAsync();
+
+
+            app.UseMiddleware<GlobalErrorHandlingMiddleware>();
+
 
             app.UseStaticFiles();
 
