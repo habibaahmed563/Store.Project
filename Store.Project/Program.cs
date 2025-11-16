@@ -1,4 +1,6 @@
 
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Store.Project.Domain.Contracts;
 using Store.Project.Persistence;
@@ -6,6 +8,7 @@ using Store.Project.Persistence.Data.Contexts;
 using Store.Project.Services;
 using Store.Project.Services.Abstractions;
 using Store.Project.Services.Mapping.Products;
+using Store.Project.Shared.ErrorModels;
 using Store.Project.Web.Middlewares;
 
 namespace Store.Project
@@ -33,6 +36,26 @@ namespace Store.Project
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile(builder.Configuration)));
+
+
+            builder.Services.Configure<ApiBehaviorOptions>(config =>
+            {
+                config.InvalidModelStateResponseFactory = (ActionContext) =>
+                {
+                    var errors = ActionContext.ModelState.Where(M => M.Value.Errors.Any())
+                                                         .Select(M => new ValidationError()
+                                                         {
+                                                             Field = M.Key,
+                                                             Errors = M.Value.Errors.Select(E => E.ErrorMessage)
+                                                         }).ToList();
+
+                    var response = new ValidationErrorResponse()
+                    {
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(response);
+                };
+            });
 
 
             var app = builder.Build();
