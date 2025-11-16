@@ -16,6 +16,16 @@ namespace Store.Project.Web.Middlewares
             try
             {
                await _next.Invoke(context);
+                if(context.Response.StatusCode == 404) // reouting Middleware
+                {
+                    context.Response.ContentType = "application/json";
+                    var response = new ErrorDetails()
+                    {
+                        StatusCode = context.Response.StatusCode,
+                        ErrorMessage = $"endpoint {context.Request.Path} was not found !!"
+                    };
+                    await context.Response.WriteAsJsonAsync(response);
+                }
             }
             catch(Exception ex)
             {
